@@ -1,0 +1,19 @@
+/bin/rm -f "norme_out"
+count=0
+for f in $(find . -name '*.c' -or -name '*.h'); do
+    test="$(/usr/bin/norminette $f | grep -Ev '42 header|Norme:')"
+    if [ "$test" != "" ]
+    then
+    	echo '\n/*''\n''**'$f'\n''*/' >> "norme_out"
+    	echo "$test" >> "norme_out"
+    	((count++))
+    ##else
+    ##	echo $f': OK' >> "norme_out"
+	fi
+done
+if [ "$count" != 0 ]
+    then
+    	echo 'RIP ' $count ' FILES ARE KO' >> "norme_out"
+    else
+    	echo 'ALL CLEAR :)' >> "norme_out"
+fi
